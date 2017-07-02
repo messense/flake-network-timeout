@@ -2,6 +2,7 @@ from __future__ import absolute_import, print_function
 
 import ast
 from collections import namedtuple
+from contextlib import suppress
 
 import pycodestyle
 
@@ -20,7 +21,7 @@ class NetworkCallVisitor(ast.NodeVisitor):
         elif isinstance(node, ast.Name):
             yield node.id
 
-    def visit_Call(self, node):
+    def visit_Call(self, node):  # noqa
         if isinstance(node.func, ast.Attribute):
             if node.func.attr in ('from_url'):
                 call_path = '.'.join(self.compose_call_path(node.func.value))
@@ -41,22 +42,25 @@ class NetworkCallVisitor(ast.NodeVisitor):
                     message='You should set socket_timeout on `{}.{}`'.format(call_path, node.func.attr)
                 ))
         else:
-            if node.func.id not in {'Redis', 'StrictRedis'}:
-                return
-
-            for arg in node.keywords:
-                if arg.arg == 'socket_timeout':
+            with suppress(AttributeError):
+                if node.func.id not in {'Redis', 'StrictRedis'}:
                     return
 
-            for index, arg in enumerate(node.args):
-                if index == 0 and isinstance(arg, ast.Str):
-                    if 'socket_timeout' in arg.s:
+                for arg in node.keywords:
+                    if arg.arg == 'socket_timeout':
                         return
 
-            self.errors.append(Error(
-                lineno=node.lineno,
-                message='You should set socket_timeout on `{}`'.format(node.func.id)
-            ))
+                for index, arg in enumerate(node.args):
+                    if index == 0 and isinstance(arg, ast.Str):
+                        if 'socket_timeout' in arg.s:
+                            return
+
+                self.errors.append(Error(
+                    lineno=node.lineno,
+                    message='You should set socket_timeout on `{}`'.format(node.func.id)
+                ))
+
+        self.generic_visit(node)
 
 
 class NetworkTimeoutLinter(object):
