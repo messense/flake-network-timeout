@@ -9,7 +9,7 @@ import pycodestyle
 Error = namedtuple('Error', ['lineno', 'message'])
 
 
-class NetworkCallVistor(ast.NodeVisitor):
+class NetworkCallVisitor(ast.NodeVisitor):
     def __init__(self):
         self.errors = []
 
@@ -62,7 +62,7 @@ class NetworkCallVistor(ast.NodeVisitor):
 class NetworkTimeoutLinter(object):
     name = 'network-timeout'
     version = '0.1.0'
-    visitor_class = NetworkCallVistor
+    visitor_class = NetworkCallVisitor
 
     def __init__(self, tree, filename):
         self.tree = tree
