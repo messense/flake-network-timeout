@@ -66,7 +66,7 @@ class NetworkCallVisitor(ast.NodeVisitor):
 
 class NetworkTimeoutLinter(object):
     name = 'network-timeout'
-    version = '0.1.0'
+    version = '0.2.0'
     visitor_class = NetworkCallVisitor
 
     def __init__(self, tree, filename):

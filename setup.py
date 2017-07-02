@@ -9,7 +9,7 @@ requires = [
 setuptools.setup(
     name="flake8-network-timeout",
     license="MIT",
-    version="0.1.0",
+    version="0.2.0",
     description="our extension to flake8",
     author="Messense Lv",
     author_email="messense@icloud.com",
