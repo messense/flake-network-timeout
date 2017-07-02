@@ -39,7 +39,8 @@ class NetworkCallVisitor(ast.NodeVisitor):
 
                 self.errors.append(Error(
                     lineno=node.lineno,
-                    message='You should set socket_timeout on `{}.{}`'.format(call_path, node.func.attr)
+                    message='T601 You should set `socket_timeout` when calling `{}.{}`'.format(
+                        call_path, node.func.attr)
                 ))
         else:
             with suppress(AttributeError):
@@ -57,7 +58,7 @@ class NetworkCallVisitor(ast.NodeVisitor):
 
                 self.errors.append(Error(
                     lineno=node.lineno,
-                    message='You should set socket_timeout on `{}`'.format(node.func.id)
+                    message='T601 You should set `socket_timeout` when calling `{}`'.format(node.func.id)
                 ))
 
         self.generic_visit(node)
