@@ -32,7 +32,7 @@ class NetworkCallVistor(ast.NodeVisitor):
                         return
 
                 for index, arg in enumerate(node.args):
-                    if index == 0:
+                    if index == 0 and isinstance(arg, ast.Str):
                         if 'socket_timeout' in arg.s:
                             return
 
@@ -49,7 +49,7 @@ class NetworkCallVistor(ast.NodeVisitor):
                     return
 
             for index, arg in enumerate(node.args):
-                if index == 0:
+                if index == 0 and isinstance(arg, ast.Str):
                     if 'socket_timeout' in arg.s:
                         return
 
